@@ -36,25 +36,25 @@ test('can wait for an action', async () => {
   unmount()
 })
 
-test('removes itself from a waiter', async () => {
+test('can wait for a condition', async () => {
   const logic = kea({
     actions: () => ({
-      start: true,
-      stop: value => ({ value })
+      setValue: value => ({ value }),
+      valueWasSet: value => ({ value })
     }),
 
     listeners: ({ actions }) => ({
-      start: async () => {
+      setValue: async ({ value }) => {
         await delay(300)
-        actions.stop('hamburger')
+        actions.valueWasSet(value)
       }
     })
   })
 
-  logic.mount()
-  logic.actions.start()
-  const { value } = await waitForCondition((action) => action.type === logic.actions.stop.toString())
-  expect(value).toBe('hamburger')
-
+  const unmount2 = logic.mount()
+  logic.actions.setValue('cheeseburger')
+  const { value } = await waitForCondition(action => action.payload.value === 'cheeseburger')
+  expect(value).toBe('cheeseburger')
+  unmount2()
   expect(Array.from(getPluginContext('waitFor').conditions.values())).toEqual([])
 })
