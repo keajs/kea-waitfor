@@ -1,6 +1,6 @@
 {
   "name": "kea-waitfor",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Promise that waits for a Kea Action",
   "author": "Marius Andra",
   "license": "MIT",
