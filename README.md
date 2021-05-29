@@ -26,7 +26,7 @@ yarn add kea-waitfor
 import { waitForPlugin } from 'kea-waitfor'
 
 resetContext({
-  plugins: [waitForPlugin({ ...options })]
+  plugins: [waitForPlugin]
 })
 ```
 
