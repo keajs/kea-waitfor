@@ -26,7 +26,7 @@ function reset() {
   setPluginContext("waitFor", { byAction: {}, conditions: new Set() });
 }
 
-export const waitForPlugin = () => {
+export const waitForPlugin = () => ({
   name: "waitFor",
 
   events: {
@@ -63,4 +63,4 @@ export const waitForPlugin = () => {
       reset();
     },
   },
-};
+});
