@@ -1,32 +1,44 @@
-import { setPluginContext, getPluginContext } from 'kea'
+import { setPluginContext, getPluginContext, KeaPlugin } from 'kea'
 
 /* usage:
 await waitFor(logic.actions.something)
 */
 
-export async function waitForAction(action) {
-  return new Promise((resolve, reject) => {
-    const { byAction } = getPluginContext('waitFor')
-    if (!byAction[action]) {
-      byAction[action] = []
+export type ReduxAction = { type: string; payload: Record<string, any> }
+export type ConditionFunction = (action: ReduxAction) => boolean
+export type PaylodResolve = (payload: Record<string, any>) => void
+
+type PluginContext = {
+  byAction: Record<string, { resolve: PaylodResolve }[]>
+  conditions: Set<{
+    validate: ConditionFunction
+    resolve: PaylodResolve
+  }>
+}
+
+export async function waitForAction(actionOrActionType: ((...args: any[]) => void) | string) {
+  const actionType = typeof actionOrActionType === 'string' ? actionOrActionType : actionOrActionType.toString()
+  return new Promise((resolve) => {
+    const { byAction } = getPluginContext('waitFor') as PluginContext
+    if (!byAction[actionType]) {
+      byAction[actionType] = []
     }
-    byAction[action].push({ resolve, reject })
+    byAction[actionType].push({ resolve })
   })
 }
 
-export async function waitForCondition(condition) {
-  const { conditions } = getPluginContext('waitFor')
-  const promise = new Promise((resolve, reject) => {
-    conditions.add({ validate: condition, resolve, reject })
+export async function waitForCondition(condition: ConditionFunction) {
+  const { conditions } = getPluginContext('waitFor') as PluginContext
+  return new Promise((resolve) => {
+    conditions.add({ validate: condition, resolve })
   })
-  return promise
 }
 
 function reset() {
-  setPluginContext('waitFor', { byAction: {}, conditions: new Set() })
+  setPluginContext('waitFor', { byAction: {}, conditions: new Set() } as PluginContext)
 }
 
-export const waitForPlugin = () => ({
+export const waitForPlugin: () => KeaPlugin = () => ({
   name: 'waitFor',
 
   events: {
@@ -35,10 +47,9 @@ export const waitForPlugin = () => ({
     },
 
     beforeReduxStore(options) {
-      options.middleware.push((store) => (next) => (action) => {
+      options.middleware.push((store) => (next) => (action: ReduxAction) => {
         const response = next(action)
-        const pluginContext = getPluginContext('waitFor')
-        const { byAction, conditions } = pluginContext
+        const { byAction, conditions } = getPluginContext('waitFor') as PluginContext
 
         if (byAction[action.type]) {
           const actionWaiters = byAction[action.type]
@@ -47,7 +58,7 @@ export const waitForPlugin = () => ({
         }
 
         if (conditions.size > 0) {
-          for (let condition of conditions.values()) {
+          for (const condition of conditions.values()) {
             if (condition.validate(action)) {
               condition.resolve(action.payload)
               conditions.delete(condition)

@@ -21,10 +21,5 @@ export default [
         include: ['*.(t|j)s+(|x)', '**/*.(t|j)s+(|x)'],
       }),
     ],
-  },
-  {
-    input: './lib/src/index.d.ts',
-    output: [{ file: 'lib/index.d.ts', format: 'es' }],
-    plugins: [dts()],
-  },
+  }
 ]
