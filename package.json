@@ -15,8 +15,8 @@
   },
   "homepage": "https://github.com/keajs/kea-waitfor#readme",
   "scripts": {
-    "build": "rollup -c",
-    "watch": "rollup -cw",
+    "build": "tsc -b",
+    "watch": "tsc -w",
     "lint": "eslint src/**",
     "prepublishOnly": "npm run test && npm run build",
     "start": "npm run watch",
@@ -25,11 +25,13 @@
   "files": [
     "lib",
     "src",
-    "install"
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE.md",
+    "tsconfig.json"
   ],
   "jest": {
     "testPathIgnorePatterns": [
-      "<rootDir>/es/",
       "<rootDir>/lib/",
       "<rootDir>/node_modules/",
       "<rootDir>/src/__tests__/helper/"
@@ -72,8 +74,6 @@
     "babel-jest": "^26.0.1",
     "babel-plugin-transform-babel-env-inline": "^0.0.1",
     "cross-env": "^7.0.2",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
     "eslint-config-standard": "^14.1.1",
@@ -86,8 +86,8 @@
     "jest": "^26.0.1",
     "jest-environment-node-debug": "^2.0.0",
     "jsdom": "^16.2.2",
-    "kea": "^2.4.2",
-    "kea-typegen": "^0.3.5",
+    "kea": "^2.4.6",
+    "kea-typegen": "^1.1.5",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -95,15 +95,6 @@
     "react-test-renderer": "^16.13.1",
     "redux": "^4.0.5",
     "reselect": "^4.0.0",
-    "rollup": "^2.8.2",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-dts": "^1.4.9",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-typescript2": "^0.27.1",
-    "typescript": "^4.0.5"
-  },
-  "dependencies": {
-    "url-pattern": "^1.0.3"
+    "typescript": "^4.3.5"
   }
 }

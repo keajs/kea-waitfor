@@ -58,12 +58,12 @@ export const waitForPlugin: () => KeaPlugin = () => ({
         }
 
         if (conditions.size > 0) {
-          for (const condition of conditions.values()) {
+          conditions.forEach((condition) => {
             if (condition.validate(action)) {
               condition.resolve(action.payload)
               conditions.delete(condition)
             }
-          }
+          })
         }
 
         return response
