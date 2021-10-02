@@ -5,6 +5,9 @@ As we're at the 0.x phase, deprecations and breaking changes will still happen. 
 
 Once we react 1.0 all deprecations will be removed and the project will switch to SemVer.
 
+## 0.2.1 - 2021-10-02
+- Chore: Remove wrong "esnext: src/index.js" config
+
 ## 0.2.0 - 2021-07-20
 - Convert to TypeScript
 
